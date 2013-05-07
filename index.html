@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+
+	<title>Perspective JS</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<style>
+		body{
+			margin:0;
+			padding:0;
+			}
+		#square{
+			border:5px solid #e74031;
+			width:400px;
+			height:400px;
+			margin:auto;
+			position:absolute;
+			top:300px;
+			left:50%;
+			z-index:10;
+			}
+		.container{
+			background:#1c2930;
+			width:2000px;
+			height:2000px;
+			position:relative;
+			}
+		#output{
+			position:fixed;
+			top:0;
+			left:0;
+			background:#fff;
+			max-width:300px;
+			z-index:5;
+			padding:10px;
+			}
+		.perspective{
+			border:5px solid #e74031;
+			position:absolute;
+			}
+	</style>
+		
+</head>
+
+<body>
+
+<div id="output">
+
+</div>
+<div class="container">
+	<div id="square">
+	</div>
+</div>	
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+
+<script>
+function draw(target){
+	for(var distance = 5; distance > 0; distance--){
+			$(target).after("<div class='perspective t"+distance+"' style='top:"+(targetOffset.top - distance)+"px;left:"+(targetOffset.left -  distance)+"px;width:"+(targetWidth-distance)+"px;height:"+(targetHeight - distance)+"px;z-index:"+(targetLayer - distance)+"'></div>");
+		}
+	}
+function perspective(target){
+	
+	// Window scroll position
+	windowTop = $(window).scrollTop();
+	windowLeft = $(window).scrollLeft();
+	
+	// Browser window size
+	winWidth = $(window).width();
+	winHeight = $(window).height();
+	
+	// Coordinates of window center
+	windowY = winHeight / 2;
+	windowX = winWidth / 2;
+	
+	// Position of target element	
+	targetOffset = $(target).offset();
+	
+	// Redraw target perspecive
+	targetWidth = $(target).width();
+	targetHeight = $(target).height();
+	targetLayer = $(target).css("zIndex");
+
+	
+	$("#output").html(
+		'top: '+ (targetOffset.top - windowTop) + 
+		'<br>left: '+ (targetOffset.left - windowLeft) +
+		'<br>right: '+ ((targetOffset.left + targetWidth) - windowLeft) +
+		'<br>window size: '+ winWidth + ' ' + winHeight +
+		'<br>window center: '+ windowX + ' ' + windowY
+		);
+}
+$(function(){
+	perspective('#square');
+		draw('#square');
+
+	});
+	$(window).scroll(function(){
+		perspective('#square');
+		});
+	$(window).resize(function(){
+		perspective('#square');
+		});
+</script>
+</body>
+</html>
